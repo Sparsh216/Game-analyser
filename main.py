@@ -214,5 +214,5 @@ if __name__ == "__main__":
     uvicorn.run(
         "main:app",
         host=System.Server.HOST, reload=App.DEBUG, port=System.Server.PORT,
-        workers=System.Server.WORKERS # Workers default to 1 if debug is on
+        workers=1 # Workers default to 1 if debug is on
     )
