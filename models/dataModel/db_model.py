@@ -16,7 +16,7 @@ class Game(Base):
 
     AppID = Column(BigInteger, unique=True, nullable=False,primary_key=True,)  # app_id
     Name = Column(String, nullable=True)  # name
-    release_date = Column("Release Date",String, nullable=True)  # release_date
+    Release_date = Column("Release Date",String, nullable=True)  # release_date
     Required_age = Column(Integer, nullable=True)  # required_age
     Price = Column(Float, nullable=True)  # price
     DLC_count = Column(Integer, nullable=True)  # dlc_count
@@ -41,7 +41,6 @@ DB_HOST = "dpg-ctere5tds78s73djh81g-a.oregon-postgres.render.com"
 DB_PORT = 5432
 DATABASE = "game_db_7we4"
 db_url = f"postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DATABASE}"
-# db_url = 'game_db_7wepostgresql://game_db_7we4_user:kUtlLpadvJFSi6LpvIQa3ZNy8clECWdD@dpg-ctere5tds78s73djh81g-a.oregon-postgres.render.com/game_db_7we4'
 
 def initialize_database():
     '''
