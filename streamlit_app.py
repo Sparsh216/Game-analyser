@@ -3,7 +3,7 @@ import streamlit as st
 import pandas as pd
 
 # Set up base URL for API
-BASE_URL = "http://localhost:8080"
+BASE_URL = "https://game-analyser.onrender.com"
 
 st.title("Game Analytics Explore UI")
 
