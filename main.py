@@ -26,7 +26,7 @@ security = HTTPBasic()
 # Call on application startup
 initialize_database()
 
-@app.get("/health")
+@app.get("/")
 async def health_check() -> JSONResponse:
     '''
     Health check handler
