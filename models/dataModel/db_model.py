@@ -35,12 +35,13 @@ class Game(Base):
     Tags = Column(String, nullable=True)
 
 # Database configuration
-DB_USERNAME = "postgres"
-DB_PASSWORD = "1234"
-DB_HOST = "localhost"
+DB_USERNAME = "game_db_7we4_user"
+DB_PASSWORD = "kUtlLpadvJFSi6LpvIQa3ZNy8clECWdD"
+DB_HOST = "dpg-ctere5tds78s73djh81g-a.oregon-postgres.render.com"
 DB_PORT = 5432
-DATABASE = "game_db"
+DATABASE = "game_db_7we4"
 db_url = f"postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DATABASE}"
+# db_url = 'game_db_7wepostgresql://game_db_7we4_user:kUtlLpadvJFSi6LpvIQa3ZNy8clECWdD@dpg-ctere5tds78s73djh81g-a.oregon-postgres.render.com/game_db_7we4'
 
 def initialize_database():
     '''
