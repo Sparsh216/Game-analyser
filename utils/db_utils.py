@@ -24,7 +24,6 @@ def put_in_postgres(csv_reader, db):
     '''
     for row in csv_reader:
         if db.query(Game).filter(Game.AppID == row['AppID']).first():
-            print(f"Duplicate found for AppID: {row['AppID']}, skipping.")
             continue
         game = Game(
             AppID=int(row['AppID']),

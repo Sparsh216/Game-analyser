@@ -8,6 +8,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 from sqlalchemy_utils import database_exists, create_database
 from sqlalchemy.orm import sessionmaker 
+from utils.logger import logger
 
 # Base class setup
 Base = declarative_base()
@@ -53,22 +54,18 @@ def initialize_database():
     init database
     '''
 
-    print(f"Connecting to {db_url}...")
+    logger.info("Connecting to DB...")
     engine = create_engine(db_url)
 
     try:
         if not database_exists(engine.url):
             create_database(engine.url)
-            print(f"Database '{DATABASE}' created.")
-        else:
-            print(f"Database '{DATABASE}' already exists.")
 
         Base.metadata.create_all(engine)
-        print("Tables created or already exist.")
     except Exception as e:
-        print(f"Error during table creation: {e}")
+        logger.info("Error during table creation: %s", e)
 
-    print("Initialization complete.")
+    logger.info("Initialization complete.")
 
 
 def get_session():
