@@ -1,18 +1,22 @@
+'''
+Game analyser UI
+'''
+import os
 import requests
 import streamlit as st
 import pandas as pd
+from dotenv import load_dotenv
 
-# Set up base URL for API
+load_dotenv()
+
 BASE_URL = "https://game-analyser.onrender.com"
 
 st.title("Game Analytics Explore UI")
 
-# Sidebar for filters
 st.sidebar.header("Build Your Filter")
 
 filters = {}
 
-# Dynamic filter input
 field = st.sidebar.text_input("Field Name (e.g., AppID, Release_date)")
 value = st.sidebar.text_input("Field Value (e.g., 123)")
 operation = st.sidebar.selectbox("Operation", ["Equals", "Greater than", "Less than"])
@@ -25,24 +29,25 @@ if field and value and operation:
     elif operation == "Less than":
         filters[f"{field}__lt"] = value
 
-# Preview filters
 st.sidebar.write("### Current Filters:")
 st.sidebar.json(filters)
 
-# Button to run the query
 st.sidebar.write("---")
 run_query = st.sidebar.button("Get Results")
 
-# Main Section
 st.subheader("Results")
 
 if run_query:
     try:
-        # Make a POST request to the FastAPI /explore endpoint
+        headers = {
+            "accept": "application/json",
+            "x-api-key": os.environ.get('API_KEY')
+
+        }
         response = requests.post(
             f"{BASE_URL}/explore",
             json={"filters": filters},
-            headers={"accept": "application/json"},
+            headers=headers,
             timeout=5
         )
         if response.status_code == 200:
@@ -51,10 +56,7 @@ if run_query:
 
             # Display data as a table
             if data["data"]:
-                # Convert results to a pandas DataFrame
                 df = pd.DataFrame(data["data"])
-
-                # Render the table in a "pretty" manner
                 st.dataframe(
                     df.style.set_table_styles(
                         [
