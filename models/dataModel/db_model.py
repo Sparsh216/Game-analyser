@@ -1,3 +1,8 @@
+'''
+DB Model
+'''
+import os
+from dotenv import load_dotenv
 from sqlalchemy import Column, Integer, BigInteger, String, Float, Date, Boolean, ARRAY
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
@@ -35,11 +40,12 @@ class Game(Base):
     Tags = Column(String, nullable=True)
 
 # Database configuration
-DB_USERNAME = "game_db_7we4_user"
-DB_PASSWORD = "kUtlLpadvJFSi6LpvIQa3ZNy8clECWdD"
-DB_HOST = "dpg-ctere5tds78s73djh81g-a.oregon-postgres.render.com"
-DB_PORT = 5432
-DATABASE = "game_db_7we4"
+load_dotenv()
+DB_USERNAME = os.environ.get('DB_USERNAME')
+DB_PASSWORD = os.environ.get('DB_PASSWORD')
+DB_HOST = os.environ.get('DB_HOST')
+DB_PORT = os.environ.get('DB_PORT')
+DATABASE = os.environ.get('DATABASE')
 db_url = f"postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DATABASE}"
 
 def initialize_database():
