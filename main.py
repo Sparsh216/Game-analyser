@@ -1,3 +1,6 @@
+'''
+Game Analyser
+'''
 import uvicorn
 
 from fastapi import FastAPI, Request
@@ -41,15 +44,15 @@ async def upload_csv(request: Request, payload:UploadRequest) -> JSONResponse:
     '''
     API for uploading csv
     '''
-    # auth = authenticated_user(request=request)
-    # if auth is False:
-    #     return JSONResponse(
-    #         content={
-    #             'message': 'invalid x-api-key',
-    #             'data': {}
-    #         },
-    #         status_code=403
-    #     )
+    auth = authenticated_user(request=request)
+    if auth is False:
+        return JSONResponse(
+            content={
+                'message': 'invalid x-api-key',
+                'data': {}
+            },
+            status_code=403
+        )
 
     try:
         response = urllib.request.urlopen(payload.csvUrl)
@@ -88,22 +91,21 @@ async def explore_data(request: Request, payload:QuerryRequest) -> JSONResponse:
     '''
     Explore API
     '''
-    # auth = authenticated_user(request=request)
+    auth = authenticated_user(request=request)
 
-    # if auth is False:
-    #     return JSONResponse(
-    #         content={
-    #             'message': 'invalid x-api-key',
-    #             'data': {}
-    #         },
-    #         status_code=403
-    #     )
+    if auth is False:
+        return JSONResponse(
+            content={
+                'message': 'invalid x-api-key',
+                'data': {}
+            },
+            status_code=403
+        )
 
     try:
         db = get_session()
         query = db.query(Game)
 
-        # Get a list of all valid fields in the Game table
         valid_fields = {column.name for column in inspect(Game).columns}
 
         if not payload.filters:  # If filters are empty, return all data
@@ -113,9 +115,7 @@ async def explore_data(request: Request, payload:QuerryRequest) -> JSONResponse:
                 "data": [result.__dict__ for result in results]
             }
 
-        # Validate request filters
         for field in payload.filters.keys():
-        # Check if the field is valid
             if not any(field.startswith(valid_field) for valid_field in valid_fields):
                 return JSONResponse(
                     status_code=400,
@@ -131,7 +131,6 @@ async def explore_data(request: Request, payload:QuerryRequest) -> JSONResponse:
                 operation = "__gt" if field.endswith("__gt") else "__lt"
                 base_field = field.split(operation)[0]
 
-                # Check if the base field is valid
                 field_obj = getattr(Game, base_field, None)
                 if not field_obj:
                     return JSONResponse(
@@ -164,7 +163,6 @@ async def explore_data(request: Request, payload:QuerryRequest) -> JSONResponse:
                 field_type = field_obj.property.columns[0].type
 
                 if isinstance(field_type, String):
-                    # Handle string fields (LIKE operation)
                     if isinstance(value, str):
                         query = query.filter(field_obj.like(f"%{value}%"))
                     else:
@@ -175,7 +173,6 @@ async def explore_data(request: Request, payload:QuerryRequest) -> JSONResponse:
                             }
                         )
                 elif isinstance(field_type, (Date, DateTime)):
-                    # Handle exact date or datetime matching
                     if isinstance(value, (datetime.date, datetime.datetime)):
                         query = query.filter(field_obj == value)
                     else:
@@ -186,7 +183,6 @@ async def explore_data(request: Request, payload:QuerryRequest) -> JSONResponse:
                             }
                         )
                 else:
-                    # Default equality matching for other types
                     query = query.filter(field_obj == value)
 
             results = query.all()
@@ -195,7 +191,6 @@ async def explore_data(request: Request, payload:QuerryRequest) -> JSONResponse:
                 "count": len(results),
                 "data": [result.__dict__ for result in results]
             }
-        
     except Exception as e:
         return JSONResponse(
             status_code=500,
