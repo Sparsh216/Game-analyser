@@ -1,4 +1,6 @@
-
+'''
+DB Utils
+'''
 from datetime import datetime
 from models.dataModel.db_model import Game
 
