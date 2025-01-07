@@ -12,14 +12,14 @@ RUN pip3 install -r requirements.txt
 
 COPY . .
 
-ENV PYTHONWARNINGS=ignore
-ENV DEBUG=no
-ENV API_KEY = my-api-key
-ENV DB_USERNAME = postgres
-ENV DB_PASSWORD = 1234
-ENV DB_HOST = localhost
-ENV DB_PORT = 5432
-ENV DATABASE = game_db
+ENV PYTHONWARNINGS=ignore \
+    DEBUG=no \
+    API_KEY=my-api-key \
+    DB_USERNAME=postgres \
+    DB_PASSWORD=1234 \
+    DB_HOST=localhost \
+    DB_PORT=5432 \
+    DATABASE=game_db
 
 ENTRYPOINT ["python3"]
 
